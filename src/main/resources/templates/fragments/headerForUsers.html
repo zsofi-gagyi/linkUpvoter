@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<HTML xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <a th:href=" '/' + ${userId} + '/submit'">
+        <button type="button" class="btn btn-outline-dark btn-lg">
+            <span>Submit link</span>
+            <img src="/reply-green.png"
+                alt="reply"
+                class="icon"/>
+        </button>
+    </a>
+    <a th:href=" '/'" class="col">
+        <button type="button" class="btn btn-outline-dark btn-lg">Sign out</button>
+    </a>
+</HTML>

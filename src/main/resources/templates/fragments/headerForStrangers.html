@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<HTML xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<div class="collapse" id="signInForm">
+    <form th:action="@{'/signInOrUp'}" th:method="PUT">
+        <input placeholder="name" class="form-control" type="text" name="name" field="name"  required/>
+        <input placeholder="password" class="form-control" type="password" name="password" field="password" required/>
+        <button type="submit" class="btn btn-secondary btn-block">Go!</button>
+    </form>
+</div>
+<button style="color: black; border-color: black;"
+        class="navbar-toggler btn-dark btn-xs" type="button"
+        data-toggle="collapse" data-target="#signInForm" aria-controls="navbarToggleExternalContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+    <span>To participate in the conversation, sign in or sign up!</span>
+</button>
+</HTML>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<HTML xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
+    <title>link upvoter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-light navbar-fixed-top" style="background-color: #d3d3d3;">
+    <div class="container">
+        <div class="col-6">
+            <h1 >Link upvoter</h1>
+        </div>
+        <div th:if="${userId != 0}" class="col-6">
+            <span th:replace="fragments/headerForUsers.html"/>
+        </div>
+        <div th:if="${userId == 0}" class="col-6">
+            <span th:replace="fragments/headerForStrangers.html"/>
+        </div>
+    </div>
+</nav>
+<div class="container" style="margin-bottom: 20px; margin-top: 20px;">
+    <div class="col-10">
+        <div th:each="thisPost: ${allPosts}">
+            <div th:if="${thisPost.hasParent == false}" style="margin-left: -10px;">
+                <div th:replace="fragments/postDisplay.html :: commentedPostDisplay(${thisPost}, ${userId}, ${pageNumber})"/>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="col-10">
+        <span th:each="onePage: ${pageLinks}">
+                <a style="color: gray;"
+                   class="btn btn-outline-success"
+                   th:if="${pageNumber == onePage}"
+                   th:href="@{'/' + ${userId} +'/'+${onePage} + '/page'}" th:text="@{'page ' + ${onePage}}"/>
+                <a style="font-weight: bold;"
+                   class="btn btn-outline-dark"
+                   th:unless="${pageNumber == onePage}"
+                   th:href="@{'/' + ${userId} +'/'+${onePage} + '/page'}" th:text="@{'page ' + ${onePage}}"/>
+        </span>
+    </div>
+</div>
+<script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
+<script src="/webjars/bootstrap/4.3.1/js/bootstrap.bundle.js"></script>
+</body>
+</HTML>

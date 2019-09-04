@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<HTML xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
+    <title>link upvoter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+    <style>
+        .score {
+            font-weight: bold;
+        }
+
+        .singlePost {
+            line-height: 14px;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+<div th:fragment="singlePostDisplay (thisPost, userId, pageNumber)" class="singlePost">
+    <div style="margin-left: 10px; margin-bottom: 5px;" class="rounded">
+        <div th:utext="'Posted by '+'<b>' + ${thisPost.author}  + '</b>' + '  ' + ${thisPost.timeAgo} "/>
+
+        <div><a th:text="${thisPost.getTitle()}"
+                th:href="@{${thisPost.getUrl()}}"
+                class="h5 text-success"/></div>
+        <span>
+            <img th:unless="${thisPost.canBeUpvoted} == true"
+                 src="/upvote-gray.png"
+                 alt="upvote"
+                 class="icon"/>
+            <a th:if="${thisPost.canBeUpvoted} == true"
+               th:href="@{'/' + ${userId} + '/' + ${thisPost.id} + '/increaseScore/' + ${pageNumber}}"><img
+                    src="/upvote-green.png"
+                    alt="upvote"
+                    class="icon"/></a>
+        </span>
+        <span th:text="${thisPost.score}" class="score"/>
+        <span>
+            <img th:unless="${thisPost.canBeDownvoted} == true"
+                 src="/downvote-gray.png"
+                 alt="downvote"
+                 class="icon"/>
+            <a th:if="${thisPost.canBeDownvoted} == true"
+               th:href="@{'/' + ${userId} + '/' + ${thisPost.id} + '/decreaseScore/' + ${pageNumber}}"><img
+                    src="/downvote-green.png"
+                    alt="downvote"
+                    class="icon"/></a>
+        </span>
+        <span th:if="${userId != 0}">
+            <a th:href=" '/' + ${userId} + '/'+ ${thisPost.id} +'/'+${pageNumber}+'/submit'"><img
+                    src="/reply-green.png"
+                    alt="reply"
+                    class="icon"/></a>
+        </span>
+        <span>
+            <img th:unless="${userId != 0}"
+                 src="/reply-gray.png"
+                 alt="reply"
+                 class="icon"/>
+        </span>
+
+
+    </div>
+</div>
+<div th:fragment="commentedPostDisplay (thisPost, userId, pageNumber)"
+     style="border-left:  lightgray solid 5px;
+        margin: 10px;">
+    <div th:replace="fragments/postDisplay.html :: singlePostDisplay (${thisPost}, ${userId}, ${pageNumber})"/>
+    <div th:each="commentOfThisPost :${thisPost.children}">
+        <div th:replace="fragments/postDisplay.html :: commentedPostDisplay (${commentOfThisPost}, ${userId}, ${pageNumber})"/>
+    </div>
+</div>
+</body>
+</HTML>
