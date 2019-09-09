@@ -17,7 +17,12 @@ public class MainPageController {
     this.mainService = mainService;
   }
 
-  @GetMapping(value = {"/", "/{pageNumber}/page", "/{userId}/{pageNumber}/page"})
+  @GetMapping(value = { "/",
+                        "/{pageNumber}/page",
+                        "/{userId}/{pageNumber}/page",
+                        "/page/{postsPerPage}",
+                        "/{userId}/page/{postsPerPage}",
+                        "/{postsPerPage}"})
   public String getPage(Model model,
     @PathVariable(required = false) Long userId,
     @PathVariable(required = false) Integer pageNumber,
@@ -25,8 +30,7 @@ public class MainPageController {
 
     userId = (userId == null) ? 0 : userId;
     pageNumber = (pageNumber == null) ? 1 : pageNumber;
-    postsPerPage = (postsPerPage == null) ?  7 : postsPerPage; //users choosing minimum number of posts / page is
-                                                                // a feature to be added
+    postsPerPage = (postsPerPage == null) ?  7 : postsPerPage;
 
     List<PostRep> allPosts = this.mainService.paginateAndTranslatePosts(pageNumber, postsPerPage, userId);
 

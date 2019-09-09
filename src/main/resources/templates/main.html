@@ -22,6 +22,19 @@
     </div>
 </nav>
 <div class="container" style="margin-bottom: 20px; margin-top: 20px;">
+    <div class="col-10" style="margin-bottom: 20px;">
+        <div class="dropdown">
+            <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Min. posts/page
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" th:href="@{'/' + ${userId} +'/page/5'}">5</a>
+                <a class="dropdown-item" th:href="@{'/' + ${userId} +'/page/10'}">10</a>
+                <a class="dropdown-item" th:href="@{'/' + ${userId} +'/page/15'}">15</a>
+                <a class="dropdown-item" th:href="@{'/' + ${userId} +'/page/20'}">20</a>
+            </div>
+        </div>
+    </div>
     <div class="col-10">
         <div th:each="thisPost: ${allPosts}">
             <div th:if="${thisPost.hasParent == false}" style="margin-left: -10px;">
@@ -33,7 +46,7 @@
 <div class="container">
     <div class="col-10">
         <span th:each="onePage: ${pageLinks}">
-                <a style="color: gray;"
+                <a style="color: gray; font-weight: bold;"
                    class="btn btn-outline-success"
                    th:if="${pageNumber == onePage}"
                    th:href="@{'/' + ${userId} +'/'+${onePage} + '/page'}" th:text="@{'page ' + ${onePage}}"/>
