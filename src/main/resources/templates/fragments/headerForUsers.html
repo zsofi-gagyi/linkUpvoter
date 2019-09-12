@@ -9,7 +9,8 @@
                 class="icon"/>
         </button>
     </a>
-    <a th:href=" '/forum/'" class="col">
+    <a th:href="${pageNumber} + '/signOut'"
+       class="col">
         <button type="button" class="btn btn-outline-dark btn-lg">Sign out</button>
     </a>
 </HTML>

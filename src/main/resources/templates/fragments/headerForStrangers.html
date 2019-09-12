@@ -2,7 +2,7 @@
 <HTML xmlns:th="http://www.thymeleaf.org"
       lang="en">
 <div class="collapse" id="signInForm">
-    <form th:action="@{'/signInOrUp'}" th:method="PUT">
+    <form th:action="@{ ${pageNumber} + '/signInOrUp'}" th:method="PUT">
         <input placeholder="name" class="form-control" type="text" name="name" field="name"  required/>
         <input placeholder="password" class="form-control" type="password" name="password" field="password" required/>
         <button type="submit" class="btn btn-secondary btn-block">Go!</button>

@@ -15,7 +15,8 @@
         <div th:replace="fragments/postDisplay.html :: singlePostDisplay(${post}, ${userId}, ${pageNumber})">
         </div>
     <div>
-        <form th:action="@{'/forum/' + ${userId} + '/submitComment'}" th:method="POST">
+        <form th:action="@{ '/users/' + ${userId} + '/submitComment'}"
+              th:method="POST">
             <div>
                 <label>Title:</label>
                 <input type="text" name="title" field="title" required/>
@@ -24,8 +25,9 @@
                 <label>Url:</label>
                 <input type="text" name="url" field="url" required/>
             </div>
-            <input type="hidden" name="parentId" field="parentId" th:value="${postId}"/>
+            <input type="hidden" name="parentId" field="parentId" th:value="${post.getId()}"/>
             <input type="hidden" name="pageNumber" field="pageNumber" th:value="${pageNumber}"/>
+            <input type="hidden" name="postsPerPage" field="postsPerPage" th:value="${postsPerPage}"/>
             <button type="submit">Submit</button>
         </form>
     </div>

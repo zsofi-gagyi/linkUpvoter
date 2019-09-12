@@ -19,7 +19,7 @@
     </style>
 </head>
 <body>
-<div th:fragment="singlePostDisplay (thisPost, userId, pageNumber)" class="singlePost">
+<div th:fragment="singlePostDisplay (thisPost)" class="singlePost">
     <div style="margin-left: 10px; margin-bottom: 5px;" class="rounded">
         <div th:utext="'Posted by '+'<b>' + ${thisPost.author}  + '</b>' + '  ' + ${thisPost.timeAgo} "/>
 
@@ -63,12 +63,12 @@
         </span>
     </div>
 </div>
-<div th:fragment="commentedPostDisplay (thisPost, userId, pageNumber)"
+<div th:fragment="commentedPostDisplay (thisPost)"
      style="border-left:  lightgray solid 5px;
         margin: 10px;">
-    <div th:replace="fragments/postDisplay.html :: singlePostDisplay (${thisPost}, ${userId}, ${pageNumber})"/>
+    <div th:replace="fragments/postDisplay.html :: singlePostDisplay (${thisPost})"/>
     <div th:each="commentOfThisPost :${thisPost.children}">
-        <div th:replace="fragments/postDisplay.html :: commentedPostDisplay (${commentOfThisPost}, ${userId}, ${pageNumber})"/>
+        <div th:replace="fragments/postDisplay.html :: commentedPostDisplay (${commentOfThisPost})"/>
     </div>
 </div>
 </body>

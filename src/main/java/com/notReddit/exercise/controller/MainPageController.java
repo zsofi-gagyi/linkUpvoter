@@ -25,9 +25,9 @@ public class MainPageController {
 
   @GetMapping("/users/{userId}/postsPerPage/{postsPerPage}/page/{pageNumber}")
   public String getPage(Model model,
-    @PathVariable Integer pageNumber,
     @PathVariable Long userId,
-    @PathVariable Integer postsPerPage) {
+    @PathVariable Integer postsPerPage,
+    @PathVariable Integer pageNumber) {
 
     PagesView rawResults = this.mainService.createPage(pageNumber, postsPerPage);
 

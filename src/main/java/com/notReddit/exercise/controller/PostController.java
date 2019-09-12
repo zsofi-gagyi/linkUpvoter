@@ -21,26 +21,35 @@ public class PostController {
     return "submitPost";
   }
 
-  @GetMapping("/forum/{userId}/{id}/{pageNumber}/submit")
-  public String getSubmitComment(Model model, @PathVariable long userId, @PathVariable(name = "id") long postId, @PathVariable int pageNumber) {
+  @GetMapping("/users/{userId}/postsPerPage/{postsPerPage}/page/{pageNumber}/posts/{id}/submit")
+  public String getSubmitComment(Model model,
+
+    @PathVariable long userId,
+    @PathVariable Integer postsPerPage,
+    @PathVariable Integer pageNumber,
+    @PathVariable(name = "id") long postId) {
+
+    model.addAttribute("userId", userId);
+    model.addAttribute("postsPerPage", postsPerPage);
     model.addAttribute("pageNumber", pageNumber);
     model.addAttribute("post", this.mainService.getPostRep(postId, userId));
-    model.addAttribute("postId", postId);
-    model.addAttribute("userId", userId);
-    model.addAttribute("user", this.mainService.getUser(userId));
+
     return "submitComment";
   }
 
-  @PostMapping("/forum/{userId}/submitComment")
+  @PostMapping("/users/{userId}/submitComment")
   public String doSubmitComment(
     @PathVariable long userId,
     @RequestParam String title,
     @RequestParam String url,
     @RequestParam long parentId,
+    @RequestParam int postsPerPage,
     @RequestParam int pageNumber) {
 
     this.mainService.save(title, url, userId, parentId);
-    return "redirect:/forum/" + userId + "/" + pageNumber + "/page";
+                  //TODO calculate the precise page number the comment will show up on
+                  // (the current method doesn't work in all cases)
+    return "redirect:/users/" + userId + "/postsPerPage/" + postsPerPage + "/page/" + pageNumber;
   }
 
   @PostMapping("/{userId}/submit")
