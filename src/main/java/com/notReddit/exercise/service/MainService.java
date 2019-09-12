@@ -99,18 +99,22 @@ public class MainService {
     }
   }
 
+  public List<PostRep> translatePosts(List<Post> rawResults, Long userId) {
+    User user =  this.userService.getUser(userId);
+    return this.postRepService.translatePostListToRepList(rawResults, user);
+  }
+
   //-------------------------------------------------relay to postService with logic from paginator--------//
 
-  private List<Post> createPage(int pageNumber, int postsPerPage) {
-    List<Post> allPosts = new ArrayList<>();
-    this.postService.findAll().forEach(allPosts::add);
+  public List<Post> createPage(int pageNumber, int postsPerPage) {
+    List<Post> allPosts = this.postService.findAll();
 
     return this.paginator.allPostsPaginated(allPosts, postsPerPage).get(pageNumber - 1);
   }
 
   public List<Integer> getPageLinks(int postsPerPage) {
-    List<Post> allPosts = new ArrayList<>();
-    this.postService.findAll().forEach(allPosts::add);
+    List<Post> allPosts = this.postService.findAll();
+
     int nrOfPages = this.paginator.allPostsPaginated(allPosts, postsPerPage).size();
 
     List<Integer> pages = new ArrayList<>();
@@ -121,19 +125,11 @@ public class MainService {
     return pages;
   }
 
-  //---------------------------deal with representation, using user-, post-, postRepService and paginator---//
+  //---------------------------deal with representation, using user-, post- and postRepService---//
 
   public PostRep getPostRep(long postId, long userId) {
     Post post = this.postService.getPost(postId);
     User user = this.userService.getUser(userId);
     return this.postRepService.translatePostToRep(post, user);
   }
-
-  public List<PostRep> paginateAndTranslatePosts(Integer pageNumber, int postsPerPage, Long userId) {
-    List<Post> rawResults = createPage(pageNumber, postsPerPage);
-    User user =  this.userService.getUser(userId);
-    return this.postRepService.translatePostListToRepList(rawResults, user);
-  }
-
-
 }

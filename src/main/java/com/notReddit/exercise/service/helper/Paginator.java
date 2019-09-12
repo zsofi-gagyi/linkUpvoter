@@ -13,25 +13,25 @@ import java.util.stream.Collectors;
 @Component
 public class Paginator {
 
-  @Autowired
-  PostService postService;
-
   public List<List<Post>> allPostsPaginated(List<Post> allPosts, int postsPerPage) {
     List<List<Post>> result = new ArrayList<>();
 
-    List<Post> postsWithFamiliesSorted = allPosts.stream()
+    List<Post> postsThatAreNotComments = allPosts.stream()
       .sorted(Comparator.comparingInt(Post::getScore).reversed())
       .filter(p -> p.getParentId() == 0)
-      .flatMap(p -> getWholeFamily(p).stream())
       .collect(Collectors.toList());
 
-    while (!postsWithFamiliesSorted.isEmpty()) {
+    List<Post> postsWithCommentsSorted = postsThatAreNotComments.stream()
+      .flatMap(p -> getWholeFamily(p, allPosts).stream())
+      .collect(Collectors.toList());
+
+    while (!postsWithCommentsSorted.isEmpty()) {
       List<Post> pageOfPostsWithoutFamilies = new ArrayList<>();
       int shown = 0;
 
-      while (shown < postsPerPage && !postsWithFamiliesSorted.isEmpty()) {
-        Post post = postsWithFamiliesSorted.get(0);
-        postsWithFamiliesSorted.remove(0);
+      while (shown < postsPerPage && !postsWithCommentsSorted.isEmpty()) {
+        Post post = postsWithCommentsSorted.get(0);
+        postsWithCommentsSorted.remove(0);
 
         if (post.getParentId() == 0) {
           pageOfPostsWithoutFamilies.add(post);
@@ -46,22 +46,24 @@ public class Paginator {
     return result;
   }
 
-  private List<Post> getWholeFamily(Post post) {
+  private List<Post> getWholeFamily(Post post, List<Post> allPosts) {
     List<Post> family = new ArrayList<>();
     family.add(post);
-    family.addAll(descendantsIfExist(post));
+    family.addAll(descendantsIfExist(post, allPosts));
     return family;
   }
 
-  private List<Post> descendantsIfExist(Post post) {
+  private List<Post> descendantsIfExist(Post post, List<Post> allPosts) {
     List<Post> descendants = new ArrayList<>();
-    List<Post> children = this.postService.findAllByParentId(post.getId());
+    List<Post> children = allPosts.stream()
+      .filter(p -> p.getParentId() == post.getId())
+      .collect(Collectors.toList());
 
     descendants.addAll(children);
 
     if (!children.isEmpty()) {
       for (Post child : children) {
-        descendants.addAll(descendantsIfExist(child));
+        descendants.addAll(descendantsIfExist(child, allPosts));
       }
     }
 
