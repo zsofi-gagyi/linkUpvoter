@@ -19,13 +19,13 @@ public class SignInController {
 
     if (this.mainService.userExists(userName)) {
       if (this.mainService.passwordIsGood(userName, password)) {
-        return "redirect:/" + this.mainService.getUserId(userName) + "/1/page";
+        return "redirect:/forum/" + this.mainService.getUserId(userName) + "/1/page";
       }
-      return "redirect:/";
+      return "redirect:/forum/";
     }
 
     this.mainService.createNewUser(userName, password);
-    return "redirect:/" + this.mainService.getUserId(userName) + "/1/page";
+    return "redirect:/forum/" + this.mainService.getUserId(userName) + "/1/page";
   }
 }
 

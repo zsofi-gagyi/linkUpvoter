@@ -13,7 +13,7 @@
     <h1>Submit a new link</h1>
 </div>
 <div>
-    <form th:action="@{'/' + ${userId} + '/submit'}" th:method="POST">
+    <form th:action="@{'/forum/' + ${userId} + '/submit'}" th:method="POST">
         <div>
             <label>Title:</label>
             <input type="text" name="title" field="title" required/>

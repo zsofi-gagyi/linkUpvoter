@@ -18,12 +18,12 @@ public class MainPageController {
     this.mainService = mainService;
   }
 
-  @GetMapping(value = { "/",
-                        "/{pageNumber}/page",
-                        "/{userId}/{pageNumber}/page",
-                        "/page/{postsPerPage}",
-                        "/{userId}/page/{postsPerPage}",
-                        "/{postsPerPage}"})
+  @GetMapping(value = { "/forum",
+    "/forum/{pageNumber}/page",
+    "/forum/{userId}/{pageNumber}/page",
+    "/forum/page/{postsPerPage}",
+    "/forum/{userId}/page/{postsPerPage}",
+    "/forum/{postsPerPage}"})
   public String getPage(Model model,
     @PathVariable(required = false) Long userId,
     @PathVariable(required = false) Integer pageNumber,
@@ -43,5 +43,10 @@ public class MainPageController {
     model.addAttribute("pageNumber", pageNumber);
 
     return "main";
+  }
+
+  @GetMapping("/")
+  public String redirectToDefault() {
+    return "redirect:/forum";
   }
 }

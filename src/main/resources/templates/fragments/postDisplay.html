@@ -32,7 +32,7 @@
                  alt="upvote"
                  class="icon"/>
             <a th:if="${thisPost.canBeUpvoted} == true"
-               th:href="@{'/' + ${userId} + '/' + ${thisPost.id} + '/increaseScore/' + ${pageNumber}}"><img
+               th:href="@{'/forum/' + ${userId} + '/' + ${thisPost.id} + '/increaseScore/' + ${pageNumber}}"><img
                     src="/upvote-green.png"
                     alt="upvote"
                     class="icon"/></a>
@@ -44,13 +44,13 @@
                  alt="downvote"
                  class="icon"/>
             <a th:if="${thisPost.canBeDownvoted} == true"
-               th:href="@{'/' + ${userId} + '/' + ${thisPost.id} + '/decreaseScore/' + ${pageNumber}}"><img
+               th:href="@{'/forum/' + ${userId} + '/' + ${thisPost.id} + '/decreaseScore/' + ${pageNumber}}"><img
                     src="/downvote-green.png"
                     alt="downvote"
                     class="icon"/></a>
         </span>
         <span th:if="${userId != 0}">
-            <a th:href=" '/' + ${userId} + '/'+ ${thisPost.id} +'/'+${pageNumber}+'/submit'"><img
+            <a th:href=" '/forum/' + ${userId} + '/'+ ${thisPost.id} +'/'+${pageNumber}+'/submit'"><img
                     src="/reply-green.png"
                     alt="reply"
                     class="icon"/></a>
@@ -61,8 +61,6 @@
                  alt="reply"
                  class="icon"/>
         </span>
-
-
     </div>
 </div>
 <div th:fragment="commentedPostDisplay (thisPost, userId, pageNumber)"

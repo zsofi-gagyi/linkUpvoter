@@ -28,10 +28,10 @@
                 Min. posts/page
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" th:href="@{'/' + ${userId} +'/page/5'}">5</a>
-                <a class="dropdown-item" th:href="@{'/' + ${userId} +'/page/10'}">10</a>
-                <a class="dropdown-item" th:href="@{'/' + ${userId} +'/page/15'}">15</a>
-                <a class="dropdown-item" th:href="@{'/' + ${userId} +'/page/20'}">20</a>
+                <a class="dropdown-item" th:href="@{'/forum/' + ${userId} +'/page/5'}">5</a>
+                <a class="dropdown-item" th:href="@{'/forum/' + ${userId} +'/page/10'}">10</a>
+                <a class="dropdown-item" th:href="@{'/forum/' + ${userId} +'/page/15'}">15</a>
+                <a class="dropdown-item" th:href="@{'/forum/' + ${userId} +'/page/20'}">20</a>
             </div>
         </div>
     </div>
@@ -49,11 +49,11 @@
                 <a style="color: gray; font-weight: bold;"
                    class="btn btn-outline-success"
                    th:if="${pageNumber == onePage}"
-                   th:href="@{'/' + ${userId} +'/'+${onePage} + '/page'}" th:text="@{'page ' + ${onePage}}"/>
+                   th:href="@{'/forum/' + ${userId} +'/'+${onePage} + '/page'}" th:text="@{'page ' + ${onePage}}"/>
                 <a style="font-weight: bold;"
                    class="btn btn-outline-dark"
                    th:unless="${pageNumber == onePage}"
-                   th:href="@{'/' + ${userId} +'/'+${onePage} + '/page'}" th:text="@{'page ' + ${onePage}}"/>
+                   th:href="@{'/forum/' + ${userId} +'/'+${onePage} + '/page'}" th:text="@{'page ' + ${onePage}}"/>
         </span>
     </div>
 </div>

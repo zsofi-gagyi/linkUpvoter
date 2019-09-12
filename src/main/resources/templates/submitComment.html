@@ -15,7 +15,7 @@
         <div th:replace="fragments/postDisplay.html :: singlePostDisplay(${post}, ${userId}, ${pageNumber})">
         </div>
     <div>
-        <form th:action="@{'/' + ${userId} + '/submitComment'}" th:method="POST">
+        <form th:action="@{'/forum/' + ${userId} + '/submitComment'}" th:method="POST">
             <div>
                 <label>Title:</label>
                 <input type="text" name="title" field="title" required/>
