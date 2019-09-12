@@ -3,7 +3,7 @@ package com.notReddit.exercise.model.representation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostRep {
+public class PostView {
 
   long id;
   boolean hasParent;
@@ -14,9 +14,9 @@ public class PostRep {
   String author;
   boolean canBeUpvoted;
   boolean canBeDownvoted;
-  List<PostRep> children;
+  List<PostView> children;
 
-  public PostRep(long id, String title, String url, int score, String author,  boolean hasParent) {
+  public PostView(long id, String title, String url, int score, String author,  boolean hasParent) {
     this.id = id;
     this.title = title;
     this.url = url;
@@ -26,7 +26,7 @@ public class PostRep {
     this.children = new ArrayList<>();
   }
 
-  public PostRep() {
+  public PostView() {
     this.children = new ArrayList<>();
   }
 
@@ -94,11 +94,11 @@ public class PostRep {
     this.id = id;
   }
 
-  public List<PostRep> getChildren() {
+  public List<PostView> getChildren() {
     return children;
   }
 
-  public void setChildren(List<PostRep> children) {
+  public void setChildren(List<PostView> children) {
     this.children = children;
   }
 

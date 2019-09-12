@@ -2,11 +2,12 @@ package com.notReddit.exercise.service;
 
 import com.notReddit.exercise.model.database.Post;
 import com.notReddit.exercise.model.database.User;
-import com.notReddit.exercise.model.representation.PostRep;
+import com.notReddit.exercise.model.representation.PagesView;
+import com.notReddit.exercise.model.representation.PostView;
 import com.notReddit.exercise.service.helper.Paginator;
 import com.notReddit.exercise.service.repositoryRelated.PostService;
 import com.notReddit.exercise.service.repositoryRelated.UserService;
-import com.notReddit.exercise.service.representationRelated.PostRepService;
+import com.notReddit.exercise.service.helper.PostViewMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class MainService {
   UserService userService;
 
   @Autowired
-  PostRepService postRepService;
+  PostViewMaker postViewMaker;
 
   @Autowired
   Paginator paginator;
@@ -99,37 +100,31 @@ public class MainService {
     }
   }
 
-  public List<PostRep> translatePosts(List<Post> rawResults, Long userId) {
+  public List<PostView> translatePosts(List<Post> rawResults, Long userId) {
     User user =  this.userService.getUser(userId);
-    return this.postRepService.translatePostListToRepList(rawResults, user);
+    return this.postViewMaker.translatePostListToRepList(rawResults, user);
   }
 
   //-------------------------------------------------relay to postService with logic from paginator--------//
 
-  public List<Post> createPage(int pageNumber, int postsPerPage) {
+  public PagesView createPage(int pageNumber, int postsPerPage) {
     List<Post> allPosts = this.postService.findAll();
+    List<List<Post>> allPostsWithoutCommentsPaginated = this.paginator.allPostsPaginated(allPosts, postsPerPage);
+    List<Post> postsOnthisPageWithoutComments = allPostsWithoutCommentsPaginated.get(pageNumber - 1);
 
-    return this.paginator.allPostsPaginated(allPosts, postsPerPage).get(pageNumber - 1);
-  }
+    List<Post> postsOnThisPageWithComments = this.paginator.addCommentsTo(postsOnthisPageWithoutComments, allPosts);
+    int maxPageNumber = allPostsWithoutCommentsPaginated.size();
 
-  public List<Integer> getPageLinks(int postsPerPage) {
-    List<Post> allPosts = this.postService.findAll();
-
-    int nrOfPages = this.paginator.allPostsPaginated(allPosts, postsPerPage).size();
-
-    List<Integer> pages = new ArrayList<>();
-    for (int i = 0; i < nrOfPages; i++){
-      pages.add(i + 1);
-    }
-
-    return pages;
+    return new PagesView(postsOnThisPageWithComments, maxPageNumber);
   }
 
   //---------------------------deal with representation, using user-, post- and postRepService---//
 
-  public PostRep getPostRep(long postId, long userId) {
+  public PostView getPostRep(long postId, long userId) {
     Post post = this.postService.getPost(postId);
+    List<Post> comments = this.postService.findAllByParentId(postId);
     User user = this.userService.getUser(userId);
-    return this.postRepService.translatePostToRep(post, user);
+
+    return this.postViewMaker.translatePostToRep(comments, post, user);
   }
 }

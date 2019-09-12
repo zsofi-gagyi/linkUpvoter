@@ -1,12 +1,11 @@
 package com.notReddit.exercise.service.helper;
 
 import com.notReddit.exercise.model.database.Post;
-import com.notReddit.exercise.service.repositoryRelated.PostService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,46 +13,70 @@ import java.util.stream.Collectors;
 public class Paginator {
 
   public List<List<Post>> allPostsPaginated(List<Post> allPosts, int postsPerPage) {
-    List<List<Post>> result = new ArrayList<>();
-
     List<Post> postsThatAreNotComments = allPosts.stream()
-      .sorted(Comparator.comparingInt(Post::getScore).reversed())
       .filter(p -> p.getParentId() == 0)
+      .sorted(Comparator.comparingInt(Post::getScore).reversed())
       .collect(Collectors.toList());
 
-    List<Post> postsWithCommentsSorted = postsThatAreNotComments.stream()
-      .flatMap(p -> getWholeFamily(p, allPosts).stream())
-      .collect(Collectors.toList());
+    HashMap<Long, Integer> itemsPerPost = getItemsPerPost(postsThatAreNotComments, allPosts);
 
-    while (!postsWithCommentsSorted.isEmpty()) {
-      List<Post> pageOfPostsWithoutFamilies = new ArrayList<>();
-      int shown = 0;
+    return paginatePostsThatAreNotComments(postsPerPage, postsThatAreNotComments,itemsPerPost);
+  }
 
-      while (shown < postsPerPage && !postsWithCommentsSorted.isEmpty()) {
-        Post post = postsWithCommentsSorted.get(0);
-        postsWithCommentsSorted.remove(0);
+  private List<List<Post>> paginatePostsThatAreNotComments(int postsPerPage, List<Post> postsThatAreNotComments,
+                                                                             HashMap<Long, Integer> itemsPerPost){
+    int postsOnthisPage = 0;
+    List<Post> pageOfNotComments = new ArrayList<>();
+    List<List<Post>> result = new ArrayList<>();
+    int index = 0;
 
-        if (post.getParentId() == 0) {
-          pageOfPostsWithoutFamilies.add(post);
-        }
-        shown++;
-      }
+    while ( index < postsThatAreNotComments.size()){
+      Post post = postsThatAreNotComments.get(index);
 
-      if (!pageOfPostsWithoutFamilies.isEmpty()) {
-        result.add(pageOfPostsWithoutFamilies);
+      pageOfNotComments.add(post);
+      postsOnthisPage += itemsPerPost.get(post.getId());
+      index++;
+
+      if (postsOnthisPage >= postsPerPage){
+        postsOnthisPage = 0;
+
+        result.add(pageOfNotComments);
+        pageOfNotComments = new ArrayList<>();
       }
     }
+
     return result;
   }
 
-  private List<Post> getWholeFamily(Post post, List<Post> allPosts) {
-    List<Post> family = new ArrayList<>();
-    family.add(post);
-    family.addAll(descendantsIfExist(post, allPosts));
-    return family;
+  public List<Post> addCommentsTo(List<Post> postsWithoutComments, List<Post> allPosts){
+    List<Post> result = new ArrayList<>();
+    for (Post post : postsWithoutComments){
+      result.addAll(addAllComments(post, allPosts));
+    }
+
+    return result;
   }
 
-  private List<Post> descendantsIfExist(Post post, List<Post> allPosts) {
+  private HashMap<Long, Integer> getItemsPerPost(List<Post> postsThatAreNotComments, List<Post> allPosts){
+    HashMap<Long, Integer> itemsPerPost = new HashMap<>();
+
+    postsThatAreNotComments
+      .forEach(post -> {
+        int itemsPerthisPost = addAllComments(post, allPosts).size();
+        itemsPerPost.put(post.getId(), itemsPerthisPost);
+      });
+
+    return itemsPerPost;
+  }
+
+  private List<Post> addAllComments(Post post, List<Post> allPosts) {
+    List<Post> postWithComments = new ArrayList<>();
+    postWithComments.add(post);
+    postWithComments.addAll(commentsIfExist(post, allPosts));
+    return postWithComments;
+  }
+
+  private List<Post> commentsIfExist(Post post, List<Post> allPosts) {
     List<Post> descendants = new ArrayList<>();
     List<Post> children = allPosts.stream()
       .filter(p -> p.getParentId() == post.getId())
@@ -63,7 +86,7 @@ public class Paginator {
 
     if (!children.isEmpty()) {
       for (Post child : children) {
-        descendants.addAll(descendantsIfExist(child, allPosts));
+        descendants.addAll(commentsIfExist(child, allPosts));
       }
     }
 
