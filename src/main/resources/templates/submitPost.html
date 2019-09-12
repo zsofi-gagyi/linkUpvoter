@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <HTML xmlns:th="http://www.thymeleaf.org"
       lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
-    <title>link upvoter</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
-</head>
+<span th:replace="fragments/head.html"></span>
 <body>
-<a href="">Home</a>
+<a href="/">Home</a>
 <div>
     <h1>Submit a new link</h1>
 </div>
 <div>
-    <form th:action="@{'/forum/' + ${userId} + '/submit'}" th:method="POST">
+    <form th:action="@{'/users/' + ${userId} + '/postsPerPage/'+ ${postsPerPage} +'/submitPost'}" th:method="POST">
         <div>
             <label>Title:</label>
             <input type="text" name="title" field="title" required/>

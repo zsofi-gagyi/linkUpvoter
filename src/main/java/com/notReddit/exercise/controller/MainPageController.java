@@ -40,8 +40,6 @@ public class MainPageController {
     model.addAttribute("postsPerPage", postsPerPage);
     model.addAttribute("pageLinks",  pageLinks);
 
-    model.addAttribute("postsPerPage", postsPerPage);
-
     return "main";
   }
 }

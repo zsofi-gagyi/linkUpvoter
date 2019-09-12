@@ -1,37 +1,22 @@
 <!DOCTYPE html>
 <HTML xmlns:th="http://www.thymeleaf.org"
       lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
-    <title>link upvoter</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
-</head>
+<span th:replace="fragments/head.html"></span>
 <body>
-<div>
-    <a href="">Home</a>
-    <div>
-        <h1>Submit reaction link to</h1>
-        <div th:replace="fragments/postDisplay.html :: singlePostDisplay(${post}, ${userId}, ${pageNumber})">
-        </div>
-    <div>
-        <form th:action="@{ '/users/' + ${userId} + '/submitComment'}"
-              th:method="POST">
-            <div>
-                <label>Title:</label>
-                <input type="text" name="title" field="title" required/>
-            </div>
-            <div>
-                <label>Url:</label>
-                <input type="text" name="url" field="url" required/>
-            </div>
-            <input type="hidden" name="parentId" field="parentId" th:value="${post.getId()}"/>
-            <input type="hidden" name="pageNumber" field="pageNumber" th:value="${pageNumber}"/>
-            <input type="hidden" name="postsPerPage" field="postsPerPage" th:value="${postsPerPage}"/>
-            <button type="submit">Submit</button>
-        </form>
-    </div>
-</div>
+    <a href="/">Home</a>
+    <h1>Submit reaction link to</h1>
+    <div th:replace="fragments/postDisplay.html :: singlePostDisplay(${post})"></div>
+    <form th:action="@{ '/users/' + ${userId} + '/submitComment'}"
+          th:method="POST">
+        <label>Title:</label>
+        <input type="text" name="title" field="title" required/>
+        <label>Url:</label>
+        <input type="text" name="url" field="url" required/>
+        <input type="hidden" name="parentId" field="parentId" th:value="${post.getId()}"/>
+        <input type="hidden" name="pageNumber" field="pageNumber" th:value="${pageNumber}"/>
+        <input type="hidden" name="postsPerPage" field="postsPerPage" th:value="${postsPerPage}"/>
+        <button type="submit">Submit</button>
+    </form>
     <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/js/bootstrap.bundle.js"></script>
 </body>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <HTML xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <a th:href=" '/forum/' + ${userId} + '/submit'">
+    <a th:href=" '/users/' + ${userId} + '/postsPerPage/' + ${postsPerPage} + '/submitPost'">
         <button type="button" class="btn btn-outline-dark btn-lg">
             <span>Submit link</span>
             <img src="/reply-green.png"
