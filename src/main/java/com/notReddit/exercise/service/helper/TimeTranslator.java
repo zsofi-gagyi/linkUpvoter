@@ -13,6 +13,11 @@ public class TimeTranslator {
   public String describePeriodSince(LocalDate creationDate) {
     LocalDate now = LocalDate.now();
     Period period = Period.between(creationDate, now);
+
+    if (period.isNegative()){
+      throw new ArithmeticException("The date seems to be from the future");
+    }
+
     List<String> timeDescriptions = new ArrayList<>();
 
     if (period.getYears() > 0) {
