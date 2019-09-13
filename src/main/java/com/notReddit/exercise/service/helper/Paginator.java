@@ -12,18 +12,18 @@ import java.util.stream.Collectors;
 @Component
 public class Paginator {
 
-  public List<List<Post>> allPostsPaginated(List<Post> allPosts, int postsPerPage) {
+  public List<List<Post>> postsExceptCommentsPaginated(List<Post> allPosts, int postsPerPage) {
     List<Post> postsThatAreNotComments = allPosts.stream()
       .filter(p -> p.getParentId() == 0)
       .sorted(Comparator.comparingInt(Post::getScore).reversed())
       .collect(Collectors.toList());
 
-    HashMap<Long, Integer> itemsPerPost = getItemsPerPost(postsThatAreNotComments, allPosts);
+    HashMap<Long, Integer> itemsPerPost = countPostSizeWithComments(postsThatAreNotComments, allPosts);
 
-    return paginatePostsThatAreNotComments(postsPerPage, postsThatAreNotComments,itemsPerPost);
+    return splitPostsWithoutCommentsIntoPages(postsPerPage, postsThatAreNotComments, itemsPerPost);
   }
 
-  private List<List<Post>> paginatePostsThatAreNotComments(int postsPerPage, List<Post> postsThatAreNotComments,
+  private List<List<Post>> splitPostsWithoutCommentsIntoPages(int postsPerPage, List<Post> postsThatAreNotComments,
                                                                              HashMap<Long, Integer> itemsPerPost){
     int postsOnthisPage = 0;
     List<Post> pageOfNotComments = new ArrayList<>();
@@ -51,25 +51,25 @@ public class Paginator {
   public List<Post> addCommentsTo(List<Post> postsWithoutComments, List<Post> allPosts){
     List<Post> result = new ArrayList<>();
     for (Post post : postsWithoutComments){
-      result.addAll(addAllComments(post, allPosts));
+      result.addAll(addAllCommentsToPost(post, allPosts));
     }
 
     return result;
   }
 
-  private HashMap<Long, Integer> getItemsPerPost(List<Post> postsThatAreNotComments, List<Post> allPosts){
+  private HashMap<Long, Integer> countPostSizeWithComments(List<Post> postsThatAreNotComments, List<Post> allPosts){
     HashMap<Long, Integer> itemsPerPost = new HashMap<>();
 
     postsThatAreNotComments
       .forEach(post -> {
-        int itemsPerthisPost = addAllComments(post, allPosts).size();
-        itemsPerPost.put(post.getId(), itemsPerthisPost);
+        int itemsPerThisPost = addAllCommentsToPost(post, allPosts).size();
+        itemsPerPost.put(post.getId(), itemsPerThisPost);
       });
 
     return itemsPerPost;
   }
 
-  private List<Post> addAllComments(Post post, List<Post> allPosts) {
+  private List<Post> addAllCommentsToPost(Post post, List<Post> allPosts) {
     List<Post> postWithComments = new ArrayList<>();
     postWithComments.add(post);
     postWithComments.addAll(commentsIfExist(post, allPosts));
@@ -91,5 +91,21 @@ public class Paginator {
     }
 
     return descendants;
+  }
+
+  public int findOnWhichPage(int postsPerPage, Post post, List<Post> allPosts){
+    List<List<Post>> paginated = postsExceptCommentsPaginated(allPosts, postsPerPage);
+
+    int index = 0;
+
+    while (index < allPosts.size()){
+      List<Post> curentPage = paginated.get(index);
+      if (curentPage.contains(post)){
+        return index + 1;
+      }
+      index++;
+    }
+
+    return index;
   }
 }

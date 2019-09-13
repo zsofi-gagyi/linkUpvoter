@@ -11,7 +11,6 @@ import com.notReddit.exercise.service.helper.PostViewMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,8 +34,8 @@ public class MainService {
     return this.userService.getUser(userName) != null;
   }
 
-  public boolean passwordIsGood(String userName, String password) {
-    return this.userService.getUser(userName).getPassword().equals(password);
+  public boolean passwordIsBad(String userName, String password) {
+    return !this.userService.getUser(userName).getPassword().equals(password);
   }
 
   public void createNewUser(String userName, String password) {
@@ -47,78 +46,84 @@ public class MainService {
     return this.userService.getUser(userName).getId();
   }
 
-  public User getUser(long id) {
-    return this.userService.getUser(id);
+  public User getUser(long userId){
+    return this.userService.getUser(userId);
   }
 
-  //---------------------------------------------------------use user- AND postService---------------//
+  //------------------------------------------------------relay to postService------------------------//
 
-  public void save(String title, String url, long userId, long parentId) {
-    User User = this.userService.getUser(userId);
-    this.postService.save(title, url, User, parentId);
+  public Post saveAndReturnPost(String title, String url, User user, long parentId) {
+    return this.postService.saveAndReturnPost(title, url, user, parentId);
   }
+
+  //-----------------------------------------------upvote and downvote using user- AND postService---------------//
 
   public void upvote(long postId, long userId) {
-    User upvoter = this.userService.getUser(userId);
+    User user = this.userService.getUser(userId);
     Post Post = this.postService.getPost(postId);
     List<User> fans = Post.getUpvoters();
-    List<User> notFans = Post.getDownvoters();
+    List<User> enemies = Post.getDownvoters();
 
-    if (!fans.contains(upvoter)) {
-
-      if (notFans.contains(upvoter)) {
-        notFans.remove(upvoter);
-        Post.setDownvoters(notFans);
-      } else {
-        fans.add(upvoter);
-        Post.setUpvoters(fans);
-      }
-
-      Post.setScore(Post.getScore() + 1);
-      this.postService.save(Post);
+    if (fans.contains(user)) {
+      return;
     }
+
+    if (enemies.contains(user)) {
+      enemies.remove(user);
+    } else {
+      fans.add(user);
+    }
+
+    Post.setScore(Post.getScore() + 1);
+    this.postService.save(Post);
   }
 
   public void downvote(long postId, long userId) {
-    User downvoter = this.userService.getUser(userId);
+    User user = this.userService.getUser(userId);
     Post Post = this.postService.getPost(postId);
     List<User> fans = Post.getUpvoters();
-    List<User> notFans = Post.getDownvoters();
+    List<User> enemies = Post.getDownvoters();
 
-    if (!notFans.contains(downvoter)) {
+    if (enemies.contains(user)) {
+      return;
+    }
 
-      if (fans.contains(downvoter)) {
-        fans.remove(downvoter);
-        Post.setUpvoters(fans);
+      if (fans.contains(user)) {
+        fans.remove(user);
       } else {
-        notFans.add(downvoter);
-        Post.setDownvoters(notFans);
+        enemies.add(user);
       }
 
       Post.setScore(Post.getScore() - 1);
       this.postService.save(Post);
-    }
   }
+
+  //------------------------------------deal with paging, using postService and paginator------------------//
+
+  public PagesView createPage(int pageNumber, int postsPerPage) {
+    List<Post> allPosts = this.postService.findAll();
+    List<List<Post>> allPostsWithoutCommentsPaginated = this.paginator.postsExceptCommentsPaginated(allPosts, postsPerPage);
+    List<Post> postsOnThisPageWithoutComments = allPostsWithoutCommentsPaginated.get(pageNumber - 1);
+
+    List<Post> postsOnThisPageWithComments = this.paginator.addCommentsTo(postsOnThisPageWithoutComments, allPosts);
+    int maxPageNumber = allPostsWithoutCommentsPaginated.size();
+
+    return new PagesView(postsOnThisPageWithComments, maxPageNumber);
+  }
+
+  public int findOnWhichPage(int postsPerPage, Post post){
+    List<Post> allPosts = this.postService.findAll();
+    return this.paginator.findOnWhichPage(postsPerPage, post, allPosts);
+  }
+
+  //----------------------------deal with representation, using userService and postViewMaker---------------//
 
   public List<PostView> translatePosts(List<Post> rawResults, Long userId) {
     User user =  this.userService.getUser(userId);
     return this.postViewMaker.translatePostListToRepList(rawResults, user);
   }
 
-  //-------------------------------------------------relay to postService with logic from paginator--------//
-
-  public PagesView createPage(int pageNumber, int postsPerPage) {
-    List<Post> allPosts = this.postService.findAll();
-    List<List<Post>> allPostsWithoutCommentsPaginated = this.paginator.allPostsPaginated(allPosts, postsPerPage);
-    List<Post> postsOnthisPageWithoutComments = allPostsWithoutCommentsPaginated.get(pageNumber - 1);
-
-    List<Post> postsOnThisPageWithComments = this.paginator.addCommentsTo(postsOnthisPageWithoutComments, allPosts);
-    int maxPageNumber = allPostsWithoutCommentsPaginated.size();
-
-    return new PagesView(postsOnThisPageWithComments, maxPageNumber);
-  }
-
-  //---------------------------deal with representation, using user-, post- and postRepService---//
+  //---------------------------deal with representation, using userService, postService and postViewMaker---//
 
   public PostView getPostRep(long postId, long userId) {
     Post post = this.postService.getPost(postId);

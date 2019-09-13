@@ -1,5 +1,8 @@
 package com.notReddit.exercise.controller;
 
+import com.notReddit.exercise.model.database.Post;
+import com.notReddit.exercise.model.database.User;
+import com.notReddit.exercise.model.representation.PagesView;
 import com.notReddit.exercise.service.MainService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,22 +51,27 @@ public class PostController {
     @RequestParam int postsPerPage,
     @RequestParam int pageNumber) {
 
-    this.mainService.save(title, url, userId, parentId);
-                  //TODO calculate the precise page number the comment will show up on
-                  // (the current method doesn't work perfectly in all cases)
+    User user = this.mainService.getUser(userId);
+    PagesView rawResults1 = this.mainService.createPage(pageNumber, postsPerPage);
+    Post post = this.mainService.saveAndReturnPost(title, url, user, parentId);
+
+    PagesView rawResults2 = this.mainService.createPage(pageNumber, postsPerPage);
+
     return "redirect:/users/" + userId + "/postsPerPage/" + postsPerPage + "/page/" + pageNumber;
   }
 
   @PostMapping("users/{userId}/postsPerPage/{postsPerPage}/submitPost")
-  public String doSubmit(
+  public String doSubmitPost(
     @PathVariable long userId,
     @PathVariable int postsPerPage,
     @RequestParam String title,
     @RequestParam String url) {
 
-    this.mainService.save(title, url, userId, 0);
-                    //TODO show the page the user's new post is on
-    return "redirect:/users/" + userId + "/postsPerPage/" + postsPerPage +"/page/1";
+    User user = this.mainService.getUser(userId);
+    Post post = this.mainService.saveAndReturnPost(title, url, user, 0);
+    int pageNumber = this.mainService.findOnWhichPage(postsPerPage, post);
+
+    return "redirect:/users/" + userId + "/postsPerPage/" + postsPerPage +"/page/" + pageNumber;
   }
 
   @GetMapping("/users/{userId}/postsPerPage/{postsPerPage}/page/{pageNumber}/posts/{id}/{scoreModifying}")

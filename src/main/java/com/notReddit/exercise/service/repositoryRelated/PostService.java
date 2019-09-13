@@ -28,11 +28,12 @@ public class PostService {
     return this.postRepository.findAllByParentId(parentId);
   }
 
-  public void save(String title, String url, User User, long parentId) {
-    this.postRepository.save(new Post(title, url, User, parentId));
+  public Post saveAndReturnPost(String title, String url, User user, long parentId) {
+    return save(new Post(title, url, user, parentId));
   }
 
-  public void save(Post Post) {
+  public Post save(Post Post) {
     this.postRepository.save(Post);
+    return Post;
   }
 }

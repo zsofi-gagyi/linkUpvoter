@@ -13,7 +13,7 @@ public class User {
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   long id;
 
-  @Column
+  @Column(unique = true)
   String name;
 
   @Column

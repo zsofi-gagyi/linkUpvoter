@@ -24,7 +24,7 @@ public class UserController {
     @RequestParam String password) {
 
     if (this.mainService.userExists(userName)) {
-      if (!this.mainService.passwordIsGood(userName, password)) {
+      if (this.mainService.passwordIsBad(userName, password)) {
         return "redirect:/users/0/postsPerPage/7/page/1";
       }
     } else {
@@ -37,10 +37,9 @@ public class UserController {
 
   @GetMapping("/users/{userId}/postsPerPage/{postsPerPage}/page/{pageNumber}/signOut")
   public String signOut(
-    @PathVariable Long userId,
     @PathVariable Integer postsPerPage,
     @PathVariable Integer pageNumber){
 
-    return  "redirect:/users/0/" + "/postsPerPage/" + postsPerPage + "/page/" + pageNumber;
+    return  "redirect:/users/0/postsPerPage/" + postsPerPage + "/page/" + pageNumber;
   }
 }

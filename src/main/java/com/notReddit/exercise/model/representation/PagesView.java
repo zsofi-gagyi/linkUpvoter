@@ -11,7 +11,7 @@ public class PagesView {
 
   public PagesView(List<Post> posts, int maxPageNumber) {
     this.posts = posts;
-    this.pageNumbers = new ArrayList<Integer>();
+    this.pageNumbers = new ArrayList<>();
 
     int currentPageNumber = 1;
     do {

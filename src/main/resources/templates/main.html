@@ -37,7 +37,7 @@
     <div class="col-10">
         <div th:each="thisPost: ${posts}">
             <div th:if="${thisPost.hasParent == false}" style="margin-left: -10px;">
-                <div th:replace="fragments/postDisplay.html :: commentedPostDisplay(${thisPost})"/>
+                <div th:replace="fragments/postDisplayWithComments.html :: commentedPostDisplay(${thisPost})"/>
             </div>
         </div>
     </div>
