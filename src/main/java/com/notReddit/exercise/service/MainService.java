@@ -8,7 +8,6 @@ import com.notReddit.exercise.service.helper.Paginator;
 import com.notReddit.exercise.service.repositoryRelated.PostService;
 import com.notReddit.exercise.service.repositoryRelated.UserService;
 import com.notReddit.exercise.service.helper.PostViewMaker;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,17 +15,20 @@ import java.util.List;
 @Service
 public class MainService {
 
-  @Autowired
   PostService postService;
 
-  @Autowired
   UserService userService;
 
-  @Autowired
   PostViewMaker postViewMaker;
 
-  @Autowired
   Paginator paginator;
+
+  public MainService(PostService postService, UserService userService, PostViewMaker postViewMaker, Paginator paginator) {
+    this.postService = postService;
+    this.userService = userService;
+    this.postViewMaker = postViewMaker;
+    this.paginator = paginator;
+  }
 
   //------------------------------------------------------relay to userService------------------------//
 
@@ -111,9 +113,9 @@ public class MainService {
     return new PagesView(postsOnThisPageWithComments, maxPageNumber);
   }
 
-  public int findOnWhichPage(int postsPerPage, Post post){
+  public int findOnWhichPageIsPostThatIsNotComment(int postsPerPage, Post post){
     List<Post> allPosts = this.postService.findAll();
-    return this.paginator.findOnWhichPage(postsPerPage, post, allPosts);
+    return this.paginator.findOnWhichPageIsPostThatIsNotComment(postsPerPage, post, allPosts);
   }
 
   //----------------------------deal with representation, using userService and postViewMaker---------------//

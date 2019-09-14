@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Controller
 public class UserController {
 
@@ -21,14 +23,20 @@ public class UserController {
     @PathVariable int postsPerPage,
     @PathVariable int pageNumber,
     @RequestParam(name = "name") String userName,
-    @RequestParam String password) {
+    @RequestParam String password,
+    HttpServletResponse resp) throws Exception{
 
     if (this.mainService.userExists(userName)) {
       if (this.mainService.passwordIsBad(userName, password)) {
-        return "redirect:/users/0/postsPerPage/7/page/1";
+        resp.sendError(400, "the username and/or password was incorrect");
       }
     } else {
-      this.mainService.createNewUser(userName, password);
+      try {  //BET this is not necessary - but let's see in the tests!
+        this.mainService.createNewUser(userName, password);
+      } catch(Exception e) {
+        resp.sendError(500);
+        //if this project had a logger, it would have to log this error here
+      }
     }
 
     return  "redirect:/users/" + this.mainService.getUserId(userName)  +

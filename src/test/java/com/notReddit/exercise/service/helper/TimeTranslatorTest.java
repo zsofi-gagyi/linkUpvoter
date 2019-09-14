@@ -3,10 +3,8 @@ package com.notReddit.exercise.service.helper;
 import com.notReddit.testUtilities.TimeTranslatorTestData;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import java.time.LocalDate;
 import java.util.*;
-
 import static org.junit.Assert.assertEquals;
 
 public class TimeTranslatorTest {

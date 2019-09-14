@@ -2,8 +2,8 @@ package com.notReddit.exercise.controller;
 
 import com.notReddit.exercise.model.database.Post;
 import com.notReddit.exercise.model.database.User;
-import com.notReddit.exercise.model.representation.PagesView;
 import com.notReddit.exercise.service.MainService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +11,10 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class PostController {
 
-  MainService mainService;
+  @Autowired
+  private MainService mainService;
 
-  public PostController(MainService mainService) {
-    this.mainService = mainService;
-  }
+  private enum ScoreModifying {upvote, downvote}
 
   @GetMapping("/users/{userId}/postsPerPage/{postsPerPage}/submitPost")
   public String getSubmit(Model model,
@@ -52,10 +51,7 @@ public class PostController {
     @RequestParam int pageNumber) {
 
     User user = this.mainService.getUser(userId);
-    PagesView rawResults1 = this.mainService.createPage(pageNumber, postsPerPage);
-    Post post = this.mainService.saveAndReturnPost(title, url, user, parentId);
-
-    PagesView rawResults2 = this.mainService.createPage(pageNumber, postsPerPage);
+    this.mainService.saveAndReturnPost(title, url, user, parentId);
 
     return "redirect:/users/" + userId + "/postsPerPage/" + postsPerPage + "/page/" + pageNumber;
   }
@@ -69,7 +65,7 @@ public class PostController {
 
     User user = this.mainService.getUser(userId);
     Post post = this.mainService.saveAndReturnPost(title, url, user, 0);
-    int pageNumber = this.mainService.findOnWhichPage(postsPerPage, post);
+    int pageNumber = this.mainService.findOnWhichPageIsPostThatIsNotComment(postsPerPage, post);
 
     return "redirect:/users/" + userId + "/postsPerPage/" + postsPerPage +"/page/" + pageNumber;
   }
@@ -80,9 +76,9 @@ public class PostController {
     @PathVariable Integer postsPerPage,
     @PathVariable Integer pageNumber,
     @PathVariable(name="id") long postId,
-    @PathVariable String scoreModifying) {
+    @PathVariable ScoreModifying scoreModifying) {
 
-    if (scoreModifying.equals("increaseScore")){
+    if (scoreModifying.toString().equals("increaseScore")){
       this.mainService.upvote(postId, userId);
     } else {
       this.mainService.downvote(postId, userId);

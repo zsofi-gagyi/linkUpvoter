@@ -72,6 +72,18 @@ public class Post implements Comparable<Post> {
     this.downvoters = Arrays.asList(author);
   }
 
+  public Post(long id, int score, String title, User author, long parentId) { // for testing
+    this.id = id;
+    this.score = score;
+    this.parentId = parentId;
+    this.title = title;
+    this.url = "/";
+    this.creationDate = LocalDate.now();
+    this.author = author;
+    this.upvoters = Arrays.asList(author);
+    this.downvoters = Arrays.asList(author);
+  }
+
   @Override
   public int compareTo(Post o) {
     return Integer.compare(this.getScore(), o.getScore());

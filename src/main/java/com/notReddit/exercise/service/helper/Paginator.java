@@ -45,6 +45,10 @@ public class Paginator {
       }
     }
 
+    if (!pageOfNotComments.isEmpty()){
+      result.add(pageOfNotComments);
+    }
+
     return result;
   }
 
@@ -93,7 +97,7 @@ public class Paginator {
     return descendants;
   }
 
-  public int findOnWhichPage(int postsPerPage, Post post, List<Post> allPosts){
+  public int findOnWhichPageIsPostThatIsNotComment(int postsPerPage, Post post, List<Post> allPosts){
     List<List<Post>> paginated = postsExceptCommentsPaginated(allPosts, postsPerPage);
 
     int index = 0;
