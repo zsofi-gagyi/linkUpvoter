@@ -1,13 +1,12 @@
 package com.notReddit.exercise.controller;
 
+import com.notReddit.exercise.model.exceptions.UsernameOrPasswordIsIncorrectException;
 import com.notReddit.exercise.service.MainService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class UserController {
@@ -19,16 +18,15 @@ public class UserController {
   }
 
   @PutMapping("/users/0/postsPerPage/{postsPerPage}/page/{pageNumber}/signInOrUp")
-  public String signInOrUp(
+  public Object signInOrUp(
     @PathVariable int postsPerPage,
     @PathVariable int pageNumber,
     @RequestParam(name = "name") String userName,
-    @RequestParam String password,
-    HttpServletResponse resp) throws Exception{
+    @RequestParam String password) {
 
     if (this.mainService.userExists(userName)) {
       if (this.mainService.passwordIsBad(userName, password)) {
-        resp.sendError(400, "the username and/or password was incorrect");
+        throw new UsernameOrPasswordIsIncorrectException();
       }
     } else {
         this.mainService.createNewUser(userName, password);
