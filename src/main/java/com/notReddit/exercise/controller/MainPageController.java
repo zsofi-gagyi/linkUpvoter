@@ -1,6 +1,6 @@
 package com.notReddit.exercise.controller;
 
-import com.notReddit.exercise.model.representation.PagesView;
+import com.notReddit.exercise.model.representation.PageView;
 import com.notReddit.exercise.model.representation.PostView;
 import com.notReddit.exercise.service.MainService;
 import org.springframework.stereotype.Controller;
@@ -29,16 +29,14 @@ public class MainPageController {
     @PathVariable Integer postsPerPage,
     @PathVariable Integer pageNumber) {
 
-    PagesView rawResults = this.mainService.createPage(pageNumber, postsPerPage);
-
-    List<PostView> postsToBeDisplayed = this.mainService.translatePosts(rawResults.posts, userId);
-    List<Integer> pageLinks = rawResults.pageNumbers;
+    PageView pageView = this.mainService.createPage(pageNumber, postsPerPage);
+    List<PostView> postsToBeDisplayed = this.mainService.translatePosts(pageView.posts, userId);
 
     model.addAttribute("pageNumber", pageNumber);
     model.addAttribute("userId", userId);
     model.addAttribute("posts", postsToBeDisplayed);
     model.addAttribute("postsPerPage", postsPerPage);
-    model.addAttribute("pageLinks",  pageLinks);
+    model.addAttribute("pageLinks",  pageView.pageNumbers);
 
     return "main";
   }

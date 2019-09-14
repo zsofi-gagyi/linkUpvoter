@@ -19,58 +19,58 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
   @Autowired
-  private MockMvc mockMvc;
+  private MockMvc _mockMvc;
 
   @MockBean
-  MainService mainService;
+  MainService _mainService;
 
   @Test
   public void signInOrUp_existingUser_signs_In() throws Exception {
-    Mockito.when(mainService.userExists("userName"))
+    Mockito.when(_mainService.userExists("userName"))
       .thenReturn(true);
 
-    Mockito.when(mainService.passwordIsBad("userName", "userPassword"))
+    Mockito.when(_mainService.passwordIsBad("userName", "userPassword"))
       .thenReturn(false);
 
-    Mockito.when(mainService.getUserId("userName"))
+    Mockito.when(_mainService.getUserId("userName"))
       .thenReturn(12345L);
 
-    mockMvc.perform(put("/users/0/postsPerPage/1/page/1/signInOrUp")
+    _mockMvc.perform(put("/users/0/postsPerPage/1/page/1/signInOrUp")
                       .param("name", "userName")
                       .param("password", "userPassword"))
 
       .andExpect(status().isFound())
       .andExpect(redirectedUrl("/users/12345/postsPerPage/1/page/1"));
 
-    verify(mainService, times(0))
+    verify(_mainService, times(0))
       .createNewUser("userName", "userPassword");
   }
 
   @Test
   public void signInOrUp_newUserName_signs_Up() throws Exception {
-    Mockito.when(mainService.userExists("userName")).thenReturn(false);
-    Mockito.when(mainService.getUserId("userName")).thenReturn(12345L);
+    Mockito.when(_mainService.userExists("userName")).thenReturn(false);
+    Mockito.when(_mainService.getUserId("userName")).thenReturn(12345L);
 
-    mockMvc.perform(put("/users/0/postsPerPage/1/page/1/signInOrUp")
+    _mockMvc.perform(put("/users/0/postsPerPage/1/page/1/signInOrUp")
       .param("name", "userName")
       .param("password", "userPassword"))
 
       .andExpect(status().isFound())
       .andExpect(redirectedUrl("/users/12345/postsPerPage/1/page/1"));
 
-    verify(mainService, times(1))
+    verify(_mainService, times(1))
       .createNewUser("userName", "userPassword");
   }
 
   @Test
   public void signInOrUp_badPassword_400_withMessage() throws Exception {
-    Mockito.when(mainService.userExists("userName"))
+    Mockito.when(_mainService.userExists("userName"))
       .thenReturn(true);
 
-    Mockito.when(mainService.passwordIsBad("userName", "userPassword"))
+    Mockito.when(_mainService.passwordIsBad("userName", "userPassword"))
       .thenReturn(true);
 
-    mockMvc.perform(put("/users/0/postsPerPage/1/page/1/signInOrUp")
+    _mockMvc.perform(put("/users/0/postsPerPage/1/page/1/signInOrUp")
       .param("name", "userName")
       .param("password", "userPassword"))
 

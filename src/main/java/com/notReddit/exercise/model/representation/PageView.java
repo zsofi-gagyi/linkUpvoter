@@ -5,11 +5,11 @@ import com.notReddit.exercise.model.database.Post;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PagesView {
+public class PageView {
   public List<Post> posts;
   public List<Integer> pageNumbers;
 
-  public PagesView(List<Post> posts, int maxPageNumber) {
+  public PageView(List<Post> posts, int maxPageNumber) {
     this.posts = posts;
     this.pageNumbers = new ArrayList<>();
 
@@ -18,6 +18,11 @@ public class PagesView {
       pageNumbers.add(currentPageNumber);
       currentPageNumber++;
     } while (currentPageNumber <= maxPageNumber);
+  }
+
+  public PageView() {
+    this.posts = new ArrayList<>();
+    this.pageNumbers = new ArrayList<>();
   }
 
   public List<Post> getPosts() {

@@ -2,7 +2,7 @@ package com.notReddit.exercise.service;
 
 import com.notReddit.exercise.model.database.Post;
 import com.notReddit.exercise.model.database.User;
-import com.notReddit.exercise.model.representation.PagesView;
+import com.notReddit.exercise.model.representation.PageView;
 import com.notReddit.exercise.model.representation.PostView;
 import com.notReddit.exercise.service.helper.Paginator;
 import com.notReddit.exercise.service.repositoryRelated.PostService;
@@ -102,7 +102,7 @@ public class MainService {
 
   //------------------------------------deal with paging, using postService and paginator------------------//
 
-  public PagesView createPage(int pageNumber, int postsPerPage) {
+  public PageView createPage(int pageNumber, int postsPerPage) {
     List<Post> allPosts = this.postService.findAll();
     List<List<Post>> allPostsWithoutCommentsPaginated = this.paginator.postsExceptCommentsPaginated(allPosts, postsPerPage);
     List<Post> postsOnThisPageWithoutComments = allPostsWithoutCommentsPaginated.get(pageNumber - 1);
@@ -110,7 +110,7 @@ public class MainService {
     List<Post> postsOnThisPageWithComments = this.paginator.addCommentsTo(postsOnThisPageWithoutComments, allPosts);
     int maxPageNumber = allPostsWithoutCommentsPaginated.size();
 
-    return new PagesView(postsOnThisPageWithComments, maxPageNumber);
+    return new PageView(postsOnThisPageWithComments, maxPageNumber);
   }
 
   public int findOnWhichPageIsPostThatIsNotComment(int postsPerPage, Post post){

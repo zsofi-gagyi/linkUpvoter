@@ -48,12 +48,14 @@
                 <a th:if="${anotherPage == pageNumber}"
                    style="color: gray; font-weight: bold;"
                    class="btn btn-outline-success"
+                   data-test="samePageNumber"
                    th:href="@{'/users/'+ ${userId} + '/postsPerPage/'+ ${postsPerPage} + '/page/'+ ${anotherPage}}"
                    th:text="@{'page ' + ${anotherPage}}">
                 </a>
                 <a th:unless="${anotherPage == pageNumber}"
                    style="font-weight: bold;"
                    class="btn btn-outline-dark"
+                   data-test="otherPageNumber"
                    th:href="@{'/users/'+ ${userId} + '/postsPerPage/'+ ${postsPerPage} + '/page/'+ ${anotherPage}}"
                    th:text="@{'page ' + ${anotherPage}}">
                 </a>

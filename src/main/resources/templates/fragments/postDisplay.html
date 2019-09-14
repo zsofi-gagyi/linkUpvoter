@@ -9,7 +9,8 @@
         <div>
             <a th:text="${thisPost.getTitle()}"
                th:href="@{${thisPost.getUrl()}}"
-               class="h5 text-success"></a>
+               class="h5 text-success"
+               data-test="post" ></a>
         </div>
         <span id="upvoting">
             <a th:if="${thisPost.canBeUpvoted} == true"

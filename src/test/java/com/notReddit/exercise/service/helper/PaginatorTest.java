@@ -4,9 +4,7 @@ import com.notReddit.exercise.model.database.Post;
 import com.notReddit.testUtilities.PaginatorTestData;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import java.util.List;
-
 import static org.junit.Assert.*;
 
 
