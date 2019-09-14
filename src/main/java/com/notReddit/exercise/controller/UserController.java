@@ -31,12 +31,7 @@ public class UserController {
         resp.sendError(400, "the username and/or password was incorrect");
       }
     } else {
-      try {  //BET this is not necessary - but let's see in the tests!
         this.mainService.createNewUser(userName, password);
-      } catch(Exception e) {
-        resp.sendError(500);
-        //if this project had a logger, it would have to log this error here
-      }
     }
 
     return  "redirect:/users/" + this.mainService.getUserId(userName)  +

@@ -37,9 +37,4 @@ public class UserControllerTest {
   public void signInOrUp_badPassword_400_withMessage() {
 
   }
-
-  @Test
-  public void signInOrUp_errorCreatingUser_500() {
-
-  }
 }
