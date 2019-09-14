@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <HTML xmlns:th="http://www.thymeleaf.org"
       lang="en">
-<body>
 <div th:fragment="singlePostDisplay (thisPost)" class="singlePost">
     <div style="margin-left: 10px; margin-bottom: 5px;" class="rounded">
         <div th:utext="'Posted by <strong>' + ${thisPost.author}  + '</strong>  ' + ${thisPost.timeAgo} ">
@@ -44,5 +43,4 @@
         </span>
     </div>
 </div>
-</body>
 </HTML>

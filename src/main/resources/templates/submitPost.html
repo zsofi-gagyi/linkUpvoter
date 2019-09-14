@@ -3,24 +3,25 @@
       lang="en">
 <span th:replace="fragments/head.html"></span>
 <body>
-<a href="/">Home</a>
-<div>
-    <h1>Submit a new link</h1>
-</div>
-<div>
-    <form th:action="@{'/users/' + ${userId} + '/postsPerPage/'+ ${postsPerPage} +'/submitPost'}" th:method="POST">
-        <div>
-            <label>Title:</label>
-            <input type="text" name="title" field="title" required/>
-        </div>
-        <div>
-            <label>Url:</label>
-            <input type="text" name="url" field="url" required/>
-        </div>
-        <button type="submit">Submit</button>
-    </form>
-</div>
-<script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
-<script src="/webjars/bootstrap/4.3.1/js/bootstrap.bundle.js"></script>
+    <span th:replace="fragments/headerGeneral.html"/>
+    <a href="/">Home</a>
+    <div>
+        <h1>Submit a new link</h1>
+    </div>
+    <div>
+        <form th:action="@{'/users/' + ${userId} + '/postsPerPage/'+ ${postsPerPage} +'/submitPost'}" th:method="POST">
+            <div>
+                <label>Title:</label>
+                <input type="text" name="title" field="title" required/>
+            </div>
+            <div>
+                <label>Url:</label>
+                <input type="text" name="url" field="url" required/>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.bundle.js"></script>
 </body>
 </HTML>

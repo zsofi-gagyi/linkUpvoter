@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <HTML xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <a th:href=" '/users/' + ${userId} + '/postsPerPage/' + ${postsPerPage} + '/submitPost'">
+    <a  th:if="${postRelated == null}"
+        th:href=" '/users/' + ${userId} + '/postsPerPage/' + ${postsPerPage} + '/submitPost'">
         <button type="button" class="btn btn-outline-dark btn-lg">
             <span>Submit link</span>
             <img src="/reply-green.png"
@@ -9,8 +10,7 @@
                 class="icon"/>
         </button>
     </a>
-    <a th:href="${pageNumber} + '/signOut'"
-       class="col">
-        <button type="button" class="btn btn-outline-dark btn-lg">Sign out</button>
+    <a th:href="${pageNumber} + '/signOut'">
+        <button type="button" class="btn btn-outline-dark btn-lg float-right">Sign out</button>
     </a>
 </HTML>

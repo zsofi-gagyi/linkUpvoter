@@ -3,6 +3,7 @@
       lang="en">
 <span th:replace="fragments/head.html"></span>
 <body>
+    <span th:replace="fragments/headerGeneral.html"/>
     <a href="/">Home</a>
     <h1>Submit reaction link to</h1>
     <div th:replace="fragments/postDisplay.html :: singlePostDisplay(${post})"></div>

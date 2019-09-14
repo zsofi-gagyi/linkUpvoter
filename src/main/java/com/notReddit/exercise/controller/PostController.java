@@ -23,6 +23,8 @@ public class PostController {
 
     model.addAttribute("userId", userId);
     model.addAttribute("postsPerPage", postsPerPage);
+    model.addAttribute("postRelated", true);
+
     return "submitPost";
   }
 
@@ -37,6 +39,7 @@ public class PostController {
     model.addAttribute("postsPerPage", postsPerPage);
     model.addAttribute("pageNumber", pageNumber);
     model.addAttribute("post", this.mainService.getPostRep(postId, userId));
+    model.addAttribute("postRelated", true);
 
     return "submitComment";
   }

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<HTML xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<nav class="navbar navbar-light navbar-fixed-top" style="background-color: #d3d3d3;">
+    <div class="container">
+        <div class="col-6">
+            <h1 >Link upvoter</h1>
+        </div>
+        <div class="col-2">
+        </div>
+        <div th:if="${userId != 0}" class="col-4">
+            <span th:replace="fragments/headerForUsers.html"/>
+        </div>
+        <div th:if="${userId == 0}" class="col-4">
+            <span th:replace="fragments/headerForStrangers.html"/>
+        </div>
+    </div>
+</nav>
+</HTML>

@@ -29,7 +29,7 @@ public class PostViewMaker {
 
   public PostView translatePostToRep(List<Post> allPosts, Post post, User user) {
     PostView postView = new PostView(post.getId(), post.getTitle(), post.getUrl(), post.getScore(),
-      post.getAuthor().getName(), post.getParentId() != 0);
+      post.getAuthor().getName(), post.getParentId() != 0L);
 
     if (user == null) {
       postView.setCanBeDownvoted(false);

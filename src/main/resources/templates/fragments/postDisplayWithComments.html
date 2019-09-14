@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <HTML xmlns:th="http://www.thymeleaf.org"
       lang="en">
-<body>
 <div th:fragment="commentedPostDisplay (thisPost)"
      style="border-left:  lightgray solid 5px; margin: 10px;">
     <div th:replace="fragments/postDisplay.html :: singlePostDisplay (${thisPost})"/>
-    <div th:each="commentOfThisPost :${thisPost.children}">
+    <div th:each="commentOfThisPost :${thisPost.getChildren()}">
         <div th:replace="fragments/postDisplayWithComments.html :: commentedPostDisplay(${commentOfThisPost})"/>
     </div>
 </div>
-</body>
 </HTML>
