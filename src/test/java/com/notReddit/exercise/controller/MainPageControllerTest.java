@@ -41,7 +41,7 @@ public class MainPageControllerTest {
 
   @Test
   public void getPage_httpStatusOk_formatHTML() throws Exception{
-    arrangePositiveTest();
+    prepareMainServiceMock();
 
     _mockMvc.perform(get("/users/0/postsPerPage/1/page/1"))
       .andExpect(status().isOk())
@@ -50,7 +50,7 @@ public class MainPageControllerTest {
 
   @Test
   public void getPage_displaysPosts() throws Exception{
-   arrangePositiveTest();
+   prepareMainServiceMock();
 
     MvcResult result =_mockMvc.perform(get("/users/0/postsPerPage/1/page/1"))
       .andReturn();
@@ -70,7 +70,7 @@ public class MainPageControllerTest {
 
   @Test
   public void getPage_displaysOtherPageLinks() throws Exception{
-    arrangePositiveTest();
+    prepareMainServiceMock();
 
     MvcResult result =_mockMvc.perform(get("/users/0/postsPerPage/1/page/1"))
       .andReturn();
@@ -90,7 +90,7 @@ public class MainPageControllerTest {
 
   @Test
   public void getPage_displaysSamePageLink() throws Exception{
-    arrangePositiveTest();
+    prepareMainServiceMock();
 
     MvcResult result =_mockMvc.perform(get("/users/0/postsPerPage/1/page/1"))
       .andReturn();
@@ -98,7 +98,7 @@ public class MainPageControllerTest {
     String resultString = result.getResponse().getContentAsString();
     Document resultDocument = Jsoup.parse(resultString);
 
-    List<Element> samePageLinks = resultDocument.select("a[data-test=samePageNumber]");
+    List<Element> samePageLinks = resultDocument.select("prepareMock");
     int samePageLinkNr = samePageLinks.size();
     String samePageAdress = samePageLinks.get(0).attr("href");
     String samePageName = samePageLinks.get(0).text();
@@ -108,7 +108,7 @@ public class MainPageControllerTest {
     assertEquals(samePageName, "page 1");
   }
 
-  private void arrangePositiveTest(){
+  private void prepareMainServiceMock(){
       PageView pageViewToReturn = new PageView();
       pageViewToReturn.pageNumbers = Arrays.asList(1, 2, 3);
 

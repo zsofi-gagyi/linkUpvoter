@@ -127,7 +127,7 @@ public class MainService {
 
   //---------------------------deal with representation, using userService, postService and postViewMaker---//
 
-  public PostView getPostRep(long postId, long userId) {
+  public PostView getPostView(long postId, long userId) {
     Post post = this.postService.getPost(postId);
     List<Post> comments = this.postService.findAllByParentId(postId);
     User user = this.userService.getUser(userId);
