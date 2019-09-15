@@ -36,7 +36,7 @@ public class UserController {
             "/postsPerPage/" + postsPerPage + "/page/" + pageNumber;
   }
 
-  @GetMapping("/users/{userId}/postsPerPage/{postsPerPage}/page/{pageNumber}/signOut")
+  @GetMapping("/postsPerPage/{postsPerPage}/page/{pageNumber}/signOut")
   public String signOut(
     @PathVariable Integer postsPerPage,
     @PathVariable Integer pageNumber){

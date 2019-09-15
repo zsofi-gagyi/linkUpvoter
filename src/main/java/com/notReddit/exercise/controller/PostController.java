@@ -14,8 +14,6 @@ public class PostController {
   @Autowired
   private MainService mainService;
 
-  private enum ScoreModifying {upvote, downvote}
-
   @GetMapping("/users/{userId}/postsPerPage/{postsPerPage}/submitPost")
   public String getSubmit(Model model,
     @PathVariable long userId,
@@ -23,6 +21,8 @@ public class PostController {
 
     model.addAttribute("userId", userId);
     model.addAttribute("postsPerPage", postsPerPage);
+    model.addAttribute("postRelated", true);
+
     return "submitPost";
   }
 
@@ -37,6 +37,7 @@ public class PostController {
     model.addAttribute("postsPerPage", postsPerPage);
     model.addAttribute("pageNumber", pageNumber);
     model.addAttribute("post", this.mainService.getPostRep(postId, userId));
+    model.addAttribute("postRelated", true);
 
     return "submitComment";
   }
@@ -70,20 +71,25 @@ public class PostController {
     return "redirect:/users/" + userId + "/postsPerPage/" + postsPerPage +"/page/" + pageNumber;
   }
 
-  @GetMapping("/users/{userId}/postsPerPage/{postsPerPage}/page/{pageNumber}/posts/{id}/{scoreModifying}")
-  public String modifyScore(
-    @PathVariable Long userId,
-    @PathVariable Integer postsPerPage,
-    @PathVariable Integer pageNumber,
-    @PathVariable(name="id") long postId,
-    @PathVariable ScoreModifying scoreModifying) {
+  @GetMapping("/users/{userId}/postsPerPage/{postsPerPage}/page/{pageNumber}/posts/{id}/increaseScore")
+  public String increaseScore(
+    @PathVariable long userId,
+    @PathVariable int postsPerPage,
+    @PathVariable int pageNumber,
+    @PathVariable(name="id") long postId) {
 
-    if (scoreModifying.toString().equals("increaseScore")){
-      this.mainService.upvote(postId, userId);
-    } else {
-      this.mainService.downvote(postId, userId);
-    }
+    this.mainService.upvote(postId, userId);
+    return "redirect:/users/" + userId + "/postsPerPage/" + postsPerPage +"/page/" + pageNumber;
+  }
 
+  @GetMapping("/users/{userId}/postsPerPage/{postsPerPage}/page/{pageNumber}/posts/{id}/decreaseScore")
+  public String decreaseScore(
+    @PathVariable long userId,
+    @PathVariable int postsPerPage,
+    @PathVariable int pageNumber,
+    @PathVariable(name="id") long postId) {
+
+    this.mainService.downvote(postId, userId);
     return "redirect:/users/" + userId + "/postsPerPage/" + postsPerPage +"/page/" + pageNumber;
   }
 }

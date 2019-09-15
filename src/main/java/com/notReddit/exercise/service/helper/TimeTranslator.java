@@ -21,24 +21,37 @@ public class TimeTranslator {
     List<String> timeDescriptions = new ArrayList<>();
 
     if (period.getYears() > 0) {
-      String ending = (period.getYears() == 1)? " year" : " years";
-      timeDescriptions.add(period.getYears() + ending);
+      if (period.getYears() == 1){
+        timeDescriptions.add("a year");
+      } else {
+        timeDescriptions.add(period.getYears() + " years");
+      }
     }
 
     if (period.getMonths() > 0) {
-      String ending = (period.getMonths() == 1)? " month" : " months";
-      timeDescriptions.add(period.getMonths() + ending);
+      if (period.getMonths() == 1){
+        timeDescriptions.add("a month");
+      } else {
+        timeDescriptions.add(period.getMonths() + " months");
+      }
     }
 
     if (period.getDays() > 0) {
-      String ending = (period.getDays() == 1)? " day" : " days";
-      timeDescriptions.add(period.getDays() + ending);
+      if (period.getDays() == 1){
+        timeDescriptions.add("a day");
+      } else {
+        timeDescriptions.add(period.getDays() + " days");
+      }
     }
 
     switch (timeDescriptions.size()) {
       case 0:
         return "today";
       case 1:
+        String timeDescription = timeDescriptions.get(0);
+        if (timeDescription.equals("a day")){
+          return "yesterday";
+        }
         return timeDescriptions.get(0) + " ago";
       case 2:
         return timeDescriptions.get(0) + " and " + timeDescriptions.get(1) + " ago";

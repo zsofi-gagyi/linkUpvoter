@@ -102,7 +102,7 @@ public class PostView {
     this.children = children;
   }
 
-  public boolean isHasParent() {
+  public boolean hasParent() {
     return hasParent;
   }
 

@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <HTML xmlns:th="http://www.thymeleaf.org"
       lang="en">
-<body>
 <div th:fragment="singlePostDisplay (thisPost)" class="singlePost">
     <div style="margin-left: 10px; margin-bottom: 5px;" class="rounded">
         <div th:utext="'Posted by <strong>' + ${thisPost.author}  + '</strong>  ' + ${thisPost.timeAgo} ">
         </div>
-        <div>
+        <div style="padding-bottom: 6px;">
             <a th:text="${thisPost.getTitle()}"
                th:href="@{${thisPost.getUrl()}}"
                class="h5 text-success"
@@ -44,5 +43,4 @@
         </span>
     </div>
 </div>
-</body>
 </HTML>
