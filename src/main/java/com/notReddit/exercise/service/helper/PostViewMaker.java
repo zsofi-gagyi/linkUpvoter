@@ -17,17 +17,21 @@ public class PostViewMaker {
   @Autowired
   TimeTranslator timeTranslator;
 
-  public List<PostView> translatePostListToRepList(List<Post> allPosts, User user) {
+  public List<PostView> translatePostListToRepList(List<Post> notTranslatedPosts, User user) {
     List<PostView> result = new ArrayList<>();
 
-    for (Post post : allPosts) {
-      PostView postView = translatePostToRep(allPosts, post, user);
+    List<Post> postsWithoutParents = notTranslatedPosts.stream()
+      .filter(p -> p.getParentId() == 0)
+      .collect(Collectors.toList());
+
+    for (Post post :  postsWithoutParents) {
+      PostView postView = translatePostToRep(notTranslatedPosts, post, user);
       result.add(postView);
     }
     return result;
   }
 
-  public PostView translatePostToRep(List<Post> allPosts, Post post, User user) {
+  public PostView translatePostToRep(List<Post> notTranslatedPosts, Post post, User user) {
     PostView postView = new PostView(post.getId(), post.getTitle(), post.getUrl(), post.getScore(),
       post.getAuthor().getName(), post.getParentId() != 0L);
 
@@ -42,14 +46,24 @@ public class PostViewMaker {
     String timeAgo = this.timeTranslator.describePeriodSince(post.getCreationDate());
     postView.setTimeAgo(timeAgo);
 
-    List<Post> comments = allPosts.stream()
-      .filter(p -> p.getParentId() == post.getId())
+    List<PostView> children = findAndTranslateChildren(notTranslatedPosts, post,  user);
+    postView.setChildren(children);
+
+    notTranslatedPosts.remove(post);
+    return postView;
+  }
+
+  private List<PostView> findAndTranslateChildren(List<Post> notTranslatedPosts, Post parent, User user){
+    List<Post> comments = notTranslatedPosts.stream()
+      .filter(p -> p.getParentId() == parent.getId())
       .sorted(Comparator.comparingInt((Post::getScore)).reversed())
       .collect(Collectors.toList());
 
-    List<PostView> children = translatePostListToRepList(comments, user);
-    postView.setChildren(children);
+    List<PostView> result = new ArrayList<>();
+    for (Post comment : comments){
+      result.add(translatePostToRep(notTranslatedPosts, comment, user));
+    }
 
-    return postView;
+    return result;
   }
 }
