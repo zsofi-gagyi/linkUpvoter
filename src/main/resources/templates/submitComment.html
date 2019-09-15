@@ -4,20 +4,26 @@
 <span th:replace="fragments/head.html"></span>
 <body>
     <span th:replace="fragments/headerGeneral.html"/>
-    <a href="/">Home</a>
-    <h1>Submit reaction link to</h1>
-    <div th:replace="fragments/postDisplay.html :: singlePostDisplay(${post})"></div>
-    <form th:action="@{ '/users/' + ${userId} + '/submitComment'}"
-          th:method="POST">
-        <label>Title:</label>
-        <input type="text" name="title" field="title" required/>
-        <label>Url:</label>
-        <input type="text" name="url" field="url" required/>
-        <input type="hidden" name="parentId" field="parentId" th:value="${post.getId()}"/>
-        <input type="hidden" name="pageNumber" field="pageNumber" th:value="${pageNumber}"/>
-        <input type="hidden" name="postsPerPage" field="postsPerPage" th:value="${postsPerPage}"/>
-        <button type="submit">Submit</button>
-    </form>
+    <div class="container d-flex justify-content-center" style="margin-top: 30px;">
+        <div class="col-4 text-center">
+            <h1>Submit reaction to</h1>
+            <div class="card card-body border-success" style="margin-bottom: 15px;">
+                <div th:replace="fragments/postDisplay.html :: singlePostDisplay(${post})"></div>
+            </div>
+            <form th:action="@{'/users/' + ${userId} + '/postsPerPage/'+ ${postsPerPage} +'/submitComment'}" th:method="POST">
+                <div class="form-group">
+                    <textarea class="form-control rounded-0" rows="3" id="text"
+                              name="title" field="title" placeholder="text" required></textarea>
+                    <input id="url" type="text" name="url" field="url" class="form-control"
+                           placeholder="url" required/>
+                    <input type="hidden" name="parentId" field="parentId" th:value="${post.getId()}"/>
+                    <input type="hidden" name="pageNumber" field="pageNumber" th:value="${pageNumber}"/>
+                    <input type="hidden" name="postsPerPage" field="postsPerPage" th:value="${postsPerPage}"/>
+                    <button class="btn btn-secondary btn-lg btn-block" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/js/bootstrap.bundle.js"></script>
 </body>

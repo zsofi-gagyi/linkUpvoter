@@ -14,13 +14,15 @@ public class PostController {
   @Autowired
   private MainService mainService;
 
-  @GetMapping("/users/{userId}/postsPerPage/{postsPerPage}/submitPost")
+  @GetMapping("/users/{userId}/postsPerPage/{postsPerPage}/page/{pageNumber}/submitPost")
   public String getSubmit(Model model,
     @PathVariable long userId,
-    @PathVariable Integer postsPerPage) {
+    @PathVariable Integer postsPerPage,
+    @PathVariable Integer pageNumber) {
 
     model.addAttribute("userId", userId);
     model.addAttribute("postsPerPage", postsPerPage);
+    model.addAttribute("pageNumber", pageNumber);
     model.addAttribute("postRelated", true);
 
     return "submitPost";
