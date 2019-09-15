@@ -10,7 +10,7 @@
                 class="icon"/>
         </button>
     </a>
-    <a th:href="${pageNumber} + '/signOut'">
+    <a th:href="'/postsPerPage/' + ${postsPerPage} + '/page/' + ${pageNumber} + '/signOut'">
         <button type="button" class="btn btn-outline-dark btn-lg float-right">Sign out</button>
     </a>
 </HTML>
