@@ -1,5 +1,7 @@
-<h2>Link Upvoter</h2>
-<h4>Deployed <a href="https://link-upvoter.herokuapp.com/">here</a></h4>
+<img src="https://github.com/zsofi-gagyi/linkUpvoter/blob/master/screenshots/2.png" width="870px"></img> 
+
+<h2>LinkUpvoter</h2>
+<h3>Deployed <a href="https://link-upvoter.herokuapp.com/">here</a></h3>
 <br/>
 <p>This is a simple forum featuring</p>
 
@@ -21,6 +23,3 @@ On a technical level, this project uses
 - Thymeleaf for HTML templating (using fragments)
 - Bootstrap for generating CSS (without it being the main focus)
 - Heroku for hosting
-
-
-
