@@ -14,7 +14,7 @@ public class PostController {
   @Autowired
   private MainService mainService;
 
-  private enum ScoreModifying {upvote, downvote}
+  private enum ScoreModifying {increaseScore, decreaseScore}
 
   @GetMapping("/users/{userId}/postsPerPage/{postsPerPage}/submitPost")
   public String getSubmit(Model model,
@@ -73,7 +73,7 @@ public class PostController {
     return "redirect:/users/" + userId + "/postsPerPage/" + postsPerPage +"/page/" + pageNumber;
   }
 
-  @GetMapping("/users/{userId}/postsPerPage/{postsPerPage}/page/{pageNumber}/posts/{id}/{scoreModifying}")
+  @GetMapping("/postsPerPage/{postsPerPage}/page/{pageNumber}/posts/{id}/{scoreModifying}")
   public String modifyScore(
     @PathVariable Long userId,
     @PathVariable Integer postsPerPage,
