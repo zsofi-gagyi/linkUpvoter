@@ -10,7 +10,7 @@
             <div class="card card-body border-success" style="margin-bottom: 15px;">
                 <div th:replace="fragments/postDisplay.html :: singlePostDisplay(${post})"></div>
             </div>
-            <form th:action="@{'/users/' + ${userId} + '/postsPerPage/'+ ${postsPerPage} +'/submitComment'}" th:method="POST">
+            <form th:action="@{'/users/' + ${userId} +'/submitComment'}" th:method="POST">
                 <div class="form-group">
                     <textarea class="form-control rounded-0" rows="3" id="text"
                               name="title" field="title" placeholder="text" required></textarea>
