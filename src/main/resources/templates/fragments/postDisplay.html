@@ -2,14 +2,13 @@
 <HTML xmlns:th="http://www.thymeleaf.org"
       lang="en">
 <div th:fragment="singlePostDisplay (thisPost)" class="singlePost">
-    <div style="margin-left: 10px; margin-bottom: 5px;" class="rounded">
+    <div class="post">
         <div th:utext="'Posted by <strong>' + ${thisPost.author}  + '</strong>  ' + ${thisPost.timeAgo} ">
         </div>
-        <div style="padding-bottom: 6px;">
+        <div class="post-text">
             <a th:text="${thisPost.getTitle()}"
                th:href="@{${thisPost.getUrl()}}"
-               class="h5 text-success"
-               data-test="post" ></a>
+               class="h5 text-success" data-test="post"></a>
         </div>
         <span id="upvoting">
             <a th:if="${thisPost.canBeUpvoted} == true"
@@ -20,14 +19,12 @@
             <img th:unless="${thisPost.canBeUpvoted} == true"
                  src="/upvote-gray.png" alt="upvote (forbidden)" class="icon"/>
         </span>
-        <span th:text="${thisPost.score}" class="score"></span>
+        <strong th:text="${thisPost.score}"></strong>
         <span id="downvoting">
             <a th:if="${thisPost.canBeDownvoted} == true"
                th:href="@{  '/users/' + ${userId} + '/postsPerPage/' + ${postsPerPage} +
                             '/page/' + ${pageNumber} +'/posts/'+ ${thisPost.id} + '/decreaseScore'}">
-                <img src="/downvote-green.png"
-                    alt="downvote"
-                    class="icon"/>
+                <img src="/downvote-green.png" alt="downvote" class="icon"/>
             </a>
             <img th:unless="${thisPost.canBeDownvoted} == true"
                  src="/downvote-gray.png" alt="downvote (forbidden)" class="icon"/>

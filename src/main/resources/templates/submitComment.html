@@ -4,10 +4,10 @@
 <span th:replace="fragments/head.html"></span>
 <body>
     <span th:replace="fragments/headerGeneral.html"/>
-    <div class="container d-flex justify-content-center" style="margin-top: 30px;">
+    <div class="container d-flex justify-content-center gapTop-xl">
         <div class="col-4 text-center">
             <h1>Submit reaction to</h1>
-            <div class="card card-body border-success" style="margin-bottom: 15px;">
+            <div class="card card-body border-success gapBottom">
                 <div th:replace="fragments/postDisplay.html :: singlePostDisplay(${post})"></div>
             </div>
             <form th:action="@{'/users/' + ${userId} +'/submitComment'}" th:method="POST">

@@ -4,7 +4,7 @@
 <span th:replace="fragments/head.html"></span>
 <body>
     <span th:replace="fragments/headerGeneral.html"/>
-    <div class="container d-flex justify-content-center" style="margin-top: 30px;">
+    <div class="container d-flex justify-content-center gapTop-xl">
         <div class="col-4 text-center">
             <h1>Submit a new link</h1>
            <form th:action="@{'/users/' + ${userId} + '/postsPerPage/'+ ${postsPerPage} +'/submitPost'}" th:method="POST">

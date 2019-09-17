@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<HTML xmlns:th="http://www.thymeleaf.org"
-      lang="en">
+<HTML xmlns:th="http://www.thymeleaf.org" lang="en">
     <a  th:if="${postRelated == null}"
         th:href=" '/users/' + ${userId} + '/postsPerPage/' + ${postsPerPage} + '/page/'+ ${pageNumber} +'/submitPost'">
         <button type="button" class="btn btn-outline-dark btn-lg">
             <span>Submit link</span>
-            <img src="/reply-green.png"
-                alt="reply"
-                class="icon"/>
+            <img src="/reply-green.png" alt="reply" class="icon"/>
         </button>
     </a>
     <a th:href="'/postsPerPage/' + ${postsPerPage} + '/page/' + ${pageNumber} + '/signOut'">

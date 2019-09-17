@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<HTML xmlns:th="http://www.thymeleaf.org"
-      lang="en">
-<div th:fragment="commentedPostDisplay (thisPost)"
-     style="border-left:  lightgray solid 5px; margin: 10px;">
+<HTML xmlns:th="http://www.thymeleaf.org" lang="en">
+<div class="postContainer" th:fragment="commentedPostDisplay (thisPost)">
     <div th:replace="fragments/postDisplay.html :: singlePostDisplay (${thisPost})"/>
     <div th:each="commentOfThisPost :${thisPost.getChildren()}">
         <div th:replace="fragments/postDisplayWithComments.html :: commentedPostDisplay(${commentOfThisPost})"/>
