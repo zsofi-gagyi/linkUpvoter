@@ -60,7 +60,7 @@ public class Paginator {
 
     return result;
   }
-
+                              //TODO reorganize things so the number of its comments is stored in each post instead
   private HashMap<Long, Integer> countPostSizeWithComments(List<Post> postsThatAreNotComments, List<Post> allPosts){
     HashMap<Long, Integer> itemsPerPost = new HashMap<>();
 
