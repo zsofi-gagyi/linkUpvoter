@@ -3,8 +3,8 @@
 <h2>LinkUpvoter</h2>
 <h3>Deployed <a href="https://link-upvoter.herokuapp.com/">here</a></h3>
 <br/>
+<br/>
 <p>This is a simple forum featuring</p>
-
 
 - threaded comments, displayed using recursion
 - Reddit-like upvoting and downvoting mechanics
