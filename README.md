@@ -21,5 +21,5 @@ On a technical level, this project uses
 - PostgreSQL with Hybernate for storing data
 - JUnit for unit testing, with Mockito for mocking and Jsoup for HTML parsing
 - Thymeleaf for HTML templating (using fragments)
-- Bootstrap for generating CSS (without it being the main focus)
+- Bootstrap for generating most of the CSS (without it being the main focus)
 - Heroku for hosting
